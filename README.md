@@ -1,3 +1,3 @@
 # swipereddit
-interface for easy viewing of images on Reddit.
+Interface for easy viewing of images on Reddit.
 
