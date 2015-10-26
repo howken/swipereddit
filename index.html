@@ -1,0 +1,192 @@
+<html>
+    <head>
+        <title>Swipe Reddit</title>
+        <link rel="shortcut icon" href="//www.redditstatic.com/favicon.ico" type="image/x-icon">
+        <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <style type="text/css">
+body {
+    padding:0px; 
+    margin:0px;
+}
+.app {
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    /*background-color: #FF33FF;*/
+}
+.content {
+    width: 100%;
+    height: 100%;
+    z-index: 50;
+    color: white;
+    text-align: center;
+    font-size: 3em;
+}
+.content img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: contain;
+    height: 100%;
+    width: 100%;
+}
+.bar {
+    background:rgba(255,255,255,0.2);
+    height: 100px;
+    width: 100%;
+    z-index: 100;
+}
+.top_bar {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+}
+.bottom_bar {
+    visibility: hidden;
+    position: absolute;
+    bottom: 0;
+}
+.ui-loader { visibility: hidden; }
+        </style>
+
+        <script type="text/javascript">
+
+var image_id = 0;
+var show_bars = 1;
+var reddit_session = "";
+var reddit_count = 0;
+
+var path = location.pathname;
+
+function setImage(child) {
+    console.log(child);
+    if (child.data.domain === "imgur.com") {
+        var new_url = child.data.url.replace('/imgur/gi', 'i.imgur');
+        return new_url + ".jpg";
+    } else {
+        return child.data.url;
+    }
+}
+
+function nextImage() {
+    image_id++;
+    document.getElementById("image").src=setImage(reddit_data.children[image_id]);
+    ga('send', 'pageview', path);
+    console.log(image_id);
+    if (image_id == 24) {   
+        reddit_count = reddit_count + 25;
+        image_id = 0;
+        src = 'http://www.reddit.com' + path + '/.json?count=' + reddit_count + '&after=' + reddit_session;
+        reddit = getJSON(src).then(function(res) {
+            //console.log(data);
+            document.getElementById("image").src=setImage(res.data.children[image_id]);
+            reddit_data = res.data;
+            reddit_session = reddit_data.after;
+        });
+
+    } 
+}
+
+function previousImage() {
+    if (image_id > 0) {
+        image_id--; 
+    }
+    document.getElementById("image").src=setImage(reddit_data.children[image_id]);
+    ga('send', 'pageview', path);
+    console.log(image_id);
+}
+
+getJSON = function(url) {
+    return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', url, true);
+        xhr.responseType = 'json';
+        xhr.onload = function() {
+            var status = xhr.status;
+            if (status == 200) {
+            resolve(xhr.response);
+            } else {
+                reject(status);
+            }
+        };
+        xhr.send();
+    });
+};
+
+if (path.match(/\/r\/.+/)) {
+    // Correctly formated URL, lets try and fetch it!
+    console.log("found valid path");
+
+    src = 'http://www.reddit.com' + path + '/.json';
+    var reddit_data;
+    var reddit = getJSON(src).then(function(res) {
+        //console.log(data);
+        document.getElementById("image").src=setImage(res.data.children[image_id]);
+        reddit_data = res.data;
+        if (image_id == 0) {
+            reddit_session = reddit_data.after;
+        }
+        console.log(reddit_session);
+    });
+} else {
+    // No URL matching Reddits standard format was given so a message is shown.
+    console.log("Not a valid path, show help text");
+    window.onload = function () {
+        var content_div = document.getElementById('content');
+        content_div.innerHTML = "<br><br>Welcome!"
+            + "<br><br>Add e.g. /r/pics to the url as you would on Reddit to view images from a specific subreddit."
+            + "<br>Swipe left and right to move between images."
+            + "<br><br><a href='https://github.com/howken/swipereddit'>Click here to get more information about this service.</a>";
+    }
+}
+
+// Arrow key handler
+$(document).keydown(function(e) {
+    if (e.keyCode == 39) {
+        nextImage();
+    } else if (e.keyCode == 37) {
+        previousImage();
+    }
+});
+
+// Swipe handler
+$(function(){
+    $("div.content").on( "swipeleft", swipeleftHandler );
+    function swipeleftHandler( event ){
+        nextImage();
+    }
+
+    $("div.content").on( "swiperight", swiperightHandler );
+    function swiperightHandler( event ){
+        previousImage();
+    }
+
+});
+
+        </script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-67282814-1', 'auto');
+  ga('send', 'pageview', path);
+
+</script>
+
+    </head>
+    <body>
+        <div id='app' class='app'>
+            <div id='content' class='content'><img id='image'></div>
+            <div id='top_bar' class='top_bar bar'>
+
+            </div>
+            <div id='bottom_bar' class='bottom_bar bar'>
+
+            </div>
+        </div>
+    </body>
+</html>
