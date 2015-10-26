@@ -52,12 +52,6 @@ body {
 
         <script type="text/javascript">
 
-var image_id = 0;
-var show_bars = 1;
-var reddit_session = "";
-var reddit_count = 0;
-
-var path = location.pathname;
 
 function setImage(child) {
     console.log(child);
@@ -114,7 +108,26 @@ getJSON = function(url) {
     });
 };
 
-if (path.match(/\/r\/.+/)) {
+var image_id = 0;
+var show_bars = 1;
+var reddit_session = "";
+var reddit_count = 0;
+var path = "";
+
+if (location.hash == "") {
+    path = location.pathname;
+} else {
+    path = location.hash;
+}
+found_1 = path.match(/\/r\/.+/);
+found_2 = path.match(/#\/r\/.+/);
+
+console.log(found_1);
+console.log(found_2);
+
+//if (path.match(/\/r\/.+/)) {
+if (found_1) {
+    if (found_2) { path = path.substring(1,path.length); }
     // Correctly formated URL, lets try and fetch it!
     console.log("found valid path");
 
