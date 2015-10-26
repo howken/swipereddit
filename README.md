@@ -1,5 +1,5 @@
 # swipereddit
-http://www.reddit.com Interface for easy viewing of images on Reddit.
+http://www.swipereddit.com Is an interface for easy viewing of images on Reddit.
 
 ## Usage
 
