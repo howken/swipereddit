@@ -5,52 +5,55 @@
         <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
         <style type="text/css">
-body {
-    padding:0px; 
-    margin:0px;
-}
-.app {
-    width: 100%;
-    height: 100%;
-    background-color: #000000;
-    /*background-color: #FF33FF;*/
-}
-.content {
-    width: 100%;
-    height: 100%;
-    z-index: 50;
-    color: white;
-    text-align: center;
-    font-size: 3em;
-}
-.content img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    object-fit: contain;
-    height: 100%;
-    width: 100%;
-}
-.bar {
-    background:rgba(255,255,255,0.2);
-    height: 100px;
-    width: 100%;
-    z-index: 100;
-}
-.top_bar {
-    visibility: hidden;
-    position: absolute;
-    top: 0;
-}
-.bottom_bar {
-    visibility: hidden;
-    position: absolute;
-    bottom: 0;
-}
-.ui-loader { visibility: hidden; }
-        </style>
+            body {
+                padding:0px;
+                margin:0px;
+            }
+            .app {
+                width: 100%;
+                height: 100%;
+                background-color: #000000;
+                /*background-color: #FF33FF;*/
+            }
+            .content {
+                width: 100%;
+                height: 100%;
+                z-index: 50;
+                color: white;
+                text-align: center;
+                font-size: 3em;
+            }
+            .content img {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                object-fit: contain;
+                height: 100%;
+                width: 100%;
+            }
+            .bar {
+                background:rgba(255,255,255,0.2);
+                height: 100px;
+                width: 100%;
+                z-index: 100;
+            }
+            .top_bar {
+                visibility: hidden;
+                position: absolute;
+                top: 0;
+            }
+            .bottom_bar {
+                visibility: hidden;
+                position: absolute;
+                bottom: 0;
+            }
+            .ui-loader {
+                visibility: hidden;
+                display: none;
+            }
+    </style>
 
-        <script type="text/javascript">
+<script type="text/javascript">
 
 
 function setImage(child) {
